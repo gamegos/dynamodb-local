@@ -13,6 +13,8 @@ RUN wget https://s3.eu-central-1.amazonaws.com/dynamodb-local-frankfurt/dynamodb
 COPY entrypoint.sh /usr/local/bin/
 ENTRYPOINT ["entrypoint.sh"]
 
+EXPOSE 8000
+
 VOLUME /app/data /app/init/schemas
 
 ENV AWS_ACCESS_KEY_ID=DummyAccessKeyId
