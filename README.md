@@ -12,7 +12,8 @@ Basic Usage Example:
 ```shell
 docker run -it -p 8000:8000 \
   -v $(pwd)/data/dynamodb/table-schemas:/app/init/schemas \
-  -v dynamodb-local-data:/app/data
+  -v dynamodb-local-data:/app/data \
+  -e DYNAMO_PREFIX=test. \
   gamegoscom/dynamodb-local
 ```
 
@@ -25,7 +26,7 @@ Mount the container these volumes:
 ### Environment Variables
 
 * **DYNAMO_PREFIX**: Table name prefix
-  * Default value: "dev"
+  * Default value: "dev."
   * Table name pattern: "PREFIX.TABLE_NAME"
 * **AWS_ACCESS_KEY_ID***: To override the default dummy access key ID ("DummyAccessKeyId")
 * **AWS_SECRET_ACCESS_KEY***: To override the default dummy secret access key ("DummySecretAccessKey")
@@ -45,6 +46,8 @@ version: "3.5"
     volumes:
       - dynamodb-data:/app/data
       - ./docs/dynamodb:/app/init/schemas
+    environment:
+      DYNAMO_PREFIX: test.
 volumes:
   dynamodb-data:
 ```

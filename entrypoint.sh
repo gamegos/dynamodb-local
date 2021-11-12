@@ -28,7 +28,7 @@ function start_server() {
 
 function create_table() {
     aws dynamodb --endpoint-url http://localhost:8000 --region="$AWS_REGION" create-table \
-        --table-name "$DYNAMO_PREFIX.$1" \
+        --table-name "$DYNAMO_PREFIX$1" \
         --cli-input-json file://"$2"
 }
 
