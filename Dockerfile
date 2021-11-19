@@ -20,4 +20,4 @@ VOLUME /app/data /app/init/schemas
 ENV AWS_ACCESS_KEY_ID=DummyAccessKeyId
 ENV AWS_SECRET_ACCESS_KEY=DummySecretAccessKey
 ENV AWS_REGION=DummyRegion
-ENV DYNAMO_PREFIX=dev.
+ENV DYNAMO_PREFIX=""
