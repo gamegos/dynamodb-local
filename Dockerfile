@@ -15,7 +15,7 @@ ENTRYPOINT ["entrypoint.sh"]
 
 EXPOSE 8000
 
-VOLUME /app/data /app/init/schemas
+VOLUME /app/data /app/init/schemas /app/init/data
 
 ENV AWS_ACCESS_KEY_ID=DummyAccessKeyId
 ENV AWS_SECRET_ACCESS_KEY=DummySecretAccessKey

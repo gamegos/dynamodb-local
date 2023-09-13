@@ -12,6 +12,7 @@ Basic Usage Example:
 ```shell
 docker run -it -p 8000:8000 \
   -v $(pwd)/data/dynamodb/table-schemas:/app/init/schemas \
+  -v $(pwd)/data/dynamodb/table-data:/app/init/data \
   -v dynamodb-local-data:/app/data \
   -e DYNAMO_PREFIX=test. \
   gamegoscom/dynamodb-local
@@ -21,6 +22,7 @@ docker run -it -p 8000:8000 \
 
 Mount the container these volumes:
 * `/app/init/schemas` location of table schema (.json) files
+* `/app/init/data` location of exemplary data (.json) files that will be inserted in initiation
 * `/app/data` to persist DynamoDb data
 
 ### Environment Variables
@@ -45,7 +47,8 @@ version: "3.5"
       - 8000:8000
     volumes:
       - dynamodb-data:/app/data
-      - ./docs/dynamodb:/app/init/schemas
+      - ./docs/dynamodb_tables:/app/init/schemas
+      - ./docs/dynamodb_data:/app/init/data
     environment:
       DYNAMO_PREFIX: test.
 volumes:
