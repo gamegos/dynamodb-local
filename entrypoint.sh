@@ -2,10 +2,10 @@
 set -e
 
 DATA_DIR=/app/data
-SCHEMA_DIR=/app/init/schemas
-SCHEMA_FILE_PATTERN="$SCHEMA_DIR/*.json"
-DB_DATA_DIR=/app/init/data
-DB_DATA_FILE="$DB_DATA_DIR/*.json"
+INIT_SCHEMA_DIR=/app/init/schemas
+INIT_SCHEMA_FILE_PATTERN="$INIT_SCHEMA_DIR/*.json"
+INIT_DATA_DIR=/app/init/data
+INIT_DATA_FILE_PATTERN="$INIT_DATA_DIR/*.json"
 
 # configure_aws AccessKeyID SecretAccessKey Region
 function configure_aws() {
@@ -36,13 +36,13 @@ function create_table() {
 
 function populate_data() {
     aws dynamodb --endpoint-url http://localhost:8000 --region="$AWS_REGION" put-item \
-        --table-name apps_v2 --item file://"$1"
+        --table-name "$DYNAMO_PREFIX$1" --item file://"$2"
 }
 
 function init_db() {
     # shellcheck disable=SC2086
-    if [ -z "$(ls $SCHEMA_FILE_PATTERN 2> /dev/null)" ]; then
-        echo "Cannot find schema files in $SCHEMA_DIR, skipping creating tables"
+    if [ -z "$(ls $INIT_SCHEMA_FILE_PATTERN 2> /dev/null)" ]; then
+        echo "Cannot find schema files in $INIT_SCHEMA_DIR, skipping creating tables"
         return 0
     fi
 
@@ -56,14 +56,14 @@ function init_db() {
 
     echo "Creating DynamoDb tables"
     shopt -s nullglob
-    for filename in $SCHEMA_FILE_PATTERN; do
+    for filename in $INIT_SCHEMA_FILE_PATTERN; do
         create_table "$(basename "$filename" .json)" "$filename"
     done
     echo "DynamoDb tables created"
 
     echo "Populating DynamoDb tables"
-    for filename in $DB_DATA_FILE; do
-        populate_data "$filename"
+    for filename in $INIT_DATA_FILE_PATTERN; do
+        populate_data "$(basename "$filename" .json)" "$filename"
     done
     echo "DynamoDb tables populated"
 
